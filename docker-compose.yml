@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres.local
+    hostname: db
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+  api:
+    container_name: api.local
+    build:
+      context: ./api
+      dockerfile: dev.Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      - RAILS_ENV=${RAILS_ENV}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - FRONTEND_URL=${FRONTEND_URL}
+    volumes:
+      - ./api:/rails
+  frontend:
+    container_name: frontend.local
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./frontend/src:/frontend/src
+      - ./frontend/public:/frontend/public
