@@ -38,6 +38,7 @@ class AuthController < ApplicationController
 
     if user && authenticated
       session[:user_id] = user.id
+      logger.debug session[:user_id]
       render json: {
         status: 200,
         logged_in: true,
@@ -60,11 +61,13 @@ class AuthController < ApplicationController
   def logged_in
     if @current_user
       render json: {
+        status: 200,
         logged_in: true,
         user: @current_user
       }
     else
       render json: {
+        status: 200,
         logged_in: false
       }
     end
