@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    box-sizing: border-box;
+}
+
+@layer components {
+    body {
+        @apply bg-gray-600;
+    }
+
+    .modal-background {
+        @apply bg-black absolute w-screen h-screen top-0 left-0 opacity-70;
+    }
+
+    .modal {
+        @apply absolute top-1/2 left-1/2 inline-block p-4 rounded-2xl border border-gray-300 bg-gray-500;
+        transform: translate3d(-50%, -50%, 0);
+        animation-name: pop-up;
+        animation-duration: 0.6s;
+        animation-timing-function: ease-out;
+    }
+
+    .button {
+        @apply bg-gray-800 px-2 py-1 text-white rounded disabled:bg-gray-500 border border-white;
+    }
+
+    .form {
+        @apply p-16 bg-gray-700 inline-block w-screen max-w-xl rounded border border-white mt-10 absolute left-1/2 text-white;
+
+        transform: translate3d(-50%, 0, 0);
+
+        label {
+            @apply block mb-1;
+        }
+
+        input {
+            @apply w-full block py-2 px-3 rounded border border-gray-800 text-black focus:bg-gray-800 focus:text-white outline-white;
+        }
+
+        div {
+            @apply mb-4;
+        }
+    }
+
+    .link {
+        @apply underline visited:text-sky-300 hover:no-underline float-end;        
+    }
+
+    .error {
+        @apply bg-red-500 p-2 border-2 border-red-900 rounded
+    }
+}
+
+@keyframes pop-up {
+    0% {
+        transform: translateY(25%) translateX(-50%);
+        opacity: 0.1;
+    }
+
+    100% {
+        transform: translateY(-50%) translateX(-50%);
+        opacity: 1;
+    }
+}
