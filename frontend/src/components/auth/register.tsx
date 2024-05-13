@@ -31,22 +31,22 @@ export const Register = () => {
                 {data?.errors && <Errors errors={data.errors} />}
                 <div>
                     <label htmlFor="username">Username</label>
-                    <input id="username" name="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                    <input id="username" name="username" type="text" value={username} onChange={e => setUsername(e.target.value)} required />
                 </div>
 
                 <div>
                     <label htmlFor="email">Email</label>
-                    <input id="email" name="email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <input id="email" name="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
 
                 <div>
                     <label htmlFor="username">Password</label>
-                    <input id="password" name="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <input id="password" name="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
                 </div>
 
                 <div>
                     <label htmlFor="password_confirmation">Confirm password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" value={passwordConfirmation} onChange={e => setPasswordConfirmation(e.target.value)} />
+                    <input id="password_confirmation" name="password_confirmation" type="password" value={passwordConfirmation} onChange={e => setPasswordConfirmation(e.target.value)} required />
                 </div>
 
                 <div>

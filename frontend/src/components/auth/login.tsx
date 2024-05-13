@@ -30,12 +30,12 @@ export const Login = () => {
                 {data?.errors && <Errors errors={data.errors} />}
                 <div>
                     <label htmlFor="email">Email</label>
-                    <input id="email" name="email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <input id="email" name="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
 
                 <div>
                     <label htmlFor="username">Password</label>
-                    <input id="password" name="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <input id="password" name="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
                 </div>
 
                 <div>
