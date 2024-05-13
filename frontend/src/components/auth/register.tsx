@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from '../partials/form'
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Errors } from '../partials/errors';
 import { useFetch } from '../../hooks/use_fetch';
 
@@ -10,20 +10,27 @@ export const Register = () => {
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-    const { fetch, isLoading, data } = useFetch('auth/register', 'POST');
+    const navigate = useNavigate();
+
+    const { fetch, isLoading, data } = useFetch<{
+        status: number, errors?: string[]
+    }>('auth/register', 'POST');
 
     async function submit() {
-        const obj = {
+        await fetch({
             user: {
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
                 display_name: username
             }
-        }
-
-        await fetch(obj);
+        });
     }
+
+    useEffect(() => {
+        if (!data) return;
+        navigate('/')
+    }, [data])
 
     return (
         <div className="form-page">

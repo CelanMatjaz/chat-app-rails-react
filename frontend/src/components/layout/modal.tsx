@@ -13,13 +13,13 @@ export const Modal: React.FC<React.PropsWithChildren<Props>> = (props) => {
 
     return createPortal(
         <>
-            {createPortal(<div onClick={onClose} className="modal-background"></div>, document.body)}
+        {/*{createPortal(<div onClick={onClose} className="modal-background"></div>, document.body)}
             <div className="modal" style={{ minWidth: minWidth ? `${minWidth}px` : 'auto' }}>
                 <div className="modal-content">
                     {props.children}
                 </div>
                 <button className="button" onClick={onClose}>Close</button>
-            </div>
+            </div>*/}
 
         </>,
         document.body);

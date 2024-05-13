@@ -1,27 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from '../partials/form'
 import { useFetch } from '../../hooks/use_fetch';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 import { Errors } from '../partials/errors';
+import { authState } from '../../atoms/auth';
+import { useRecoilState } from 'recoil';
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate();
+
+    const [auth, setAuth] = useRecoilState(authState);
+
     const { fetch, isLoading, data } = useFetch('auth/login', 'POST');
 
     async function submit() {
-        const obj = {
+        await fetch({
             user: {
                 email,
                 password,
                 password_confirmation: password,
             }
-        }
-
-        await fetch(obj);
+        });
     }
 
+    useEffect(() => {
+        if (!data) return;
+        setAuth({ ...auth, ...data });
+        navigate('/')
+    }, [data])
 
     return (
         <div className="form-page">

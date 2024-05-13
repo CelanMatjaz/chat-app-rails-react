@@ -13,6 +13,7 @@ export const Layout = () => {
                 <button onClick={() => setOpen(true)}>Open</button>
                 <Link className="button" to="login">Login</Link>
                 <Link className="button" to="register">Register</Link>
+                <Link className="button" to="logout">Logout</Link>
                 <Outlet />
                 {open && <Modal minWidth="400" onClose={() => setOpen(false)}>Child</Modal>}
             </div>
