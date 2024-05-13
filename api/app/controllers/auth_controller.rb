@@ -17,22 +17,38 @@ class AuthController < ApplicationController
   end
 
   def login
-    user = User.find_by(email: auth_params['email']).try(:authenticate, auth_params['password'])
+    user = User.find_by(email: auth_params['email'])
+    authenticated = user.try(:authenticate, auth_params['password'])
 
-    if user
+    if user.nil?
+      render json: {
+        status: 401,
+        errors: ['User with provided email does not exist']
+      }, status: :unauthorized
+      return
+    end
+
+    unless authenticated
+      render json: {
+        status: 401,
+        errors: ['Invalid password']
+      }, status: :unauthorized
+      return
+    end
+
+    if user && authenticated
       session[:user_id] = user.id
       render json: {
         status: 200,
         logged_in: true,
         user:
       }
-    else
-      render json: {
-        status: 401,
-        errors: user.errors.full_messages
-      }, status: :unauthorized
-
+      return
     end
+
+    render json: {
+      status: 500
+    }, status: :internal_server_error
   end
 
   def logout
