@@ -1,15 +1,13 @@
 services:
   db:
     image: postgres
-    container_name: postgres.local
+    container_name: postgres.local    
+    env_file:
+    - path: ./api/.env
+      required: true
     hostname: db
     ports: 
       - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST}
   api:
     container_name: api.local
     build:
@@ -19,13 +17,6 @@ services:
       - db
     ports:
       - 3000:3000
-    environment:
-      - RAILS_ENV=${RAILS_ENV}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - FRONTEND_URL=${FRONTEND_URL}
     volumes:
       - ./api:/rails
   frontend:
