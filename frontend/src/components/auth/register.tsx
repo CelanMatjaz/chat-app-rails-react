@@ -3,6 +3,8 @@ import { Form } from '../partials/form'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Errors } from '../partials/errors';
 import { useFetch } from '../../hooks/use_fetch';
+import { useRecoilState } from 'recoil';
+import { authState } from '../../atoms/auth';
 
 export const Register = () => {
     const [username, setUsername] = useState("");
@@ -25,12 +27,21 @@ export const Register = () => {
                 display_name: username
             }
         });
+
+        setPassword('');
+        setPasswordConfirmation('');
     }
 
     useEffect(() => {
         if (!data) return;
-        navigate('/')
-    }, [data])
+        navigate('/');
+    }, [data]);
+
+    const [auth] = useRecoilState(authState);
+
+    if (auth.logged_in) {
+        return <Navigate to="/" />
+    }
 
     return (
         <div className="form-page">

@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
-import './App.css'
-import { Route, Routes } from 'react-router-dom'
-import { Layout } from './components/layout/layout'
+import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import './App.css';
 import { authState } from './atoms/auth';
 import { useFetch } from './hooks/use_fetch';
 import { User } from './types/user';
@@ -14,13 +13,12 @@ interface IsLoggedInResponse {
 };
 
 function App() {
-    const [auth, setAuth] = useRecoilState(authState);
+    const [_, setAuth] = useRecoilState(authState);
 
     function setLoggedIn(data: IsLoggedInResponse) {
-        console.log(data)
         if (data.status === 200 && data.logged_in) {
             setAuth({
-                isLoggedIn: true,
+                logged_in: true,
                 user: data.user
             });
         }
@@ -36,13 +34,7 @@ function App() {
         _fetch();
     }, []);
 
-
-
-    return (
-        <Routes>
-            <Route path="/" element={<Layout />}></Route>
-        </Routes>
-    )
+    return <Outlet />
 }
 
 export default App

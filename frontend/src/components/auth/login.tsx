@@ -24,17 +24,22 @@ export const Login = () => {
                 password_confirmation: password,
             }
         });
+
+        setPassword('');
     }
 
     useEffect(() => {
         if (!data) return;
         setAuth({ ...auth, ...data });
         navigate('/')
-    }, [data])
+    }, [data]);
+
+    if (auth.logged_in) {
+        return <Navigate to="/" />
+    }
 
     return (
         <div className="form-page">
-
             <Form onSubmit={submit}>
                 {data?.errors && <Errors errors={data.errors} />}
                 <div>
@@ -53,7 +58,6 @@ export const Login = () => {
 
                 <button type="submit" className="button" disabled={isLoading}>{isLoading ? "Submitting..." : "Login"}</button>
             </Form>
-
         </div>
     )
 }
