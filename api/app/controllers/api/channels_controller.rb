@@ -7,7 +7,7 @@ class Api::ChannelsController < ApplicationController
       return
     end
 
-    render_json(200, Channel.where(room_id: id_param))
+    render_json(200, Channel.where(room_id: params.require(:room_id)))
   end
 
   def create

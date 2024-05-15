@@ -8,7 +8,7 @@ class Api::MessagesController < ApplicationController
     end
 
     page = pagination_params['page'] || 1
-    messages = Message.where(channel_id: params['channel_id']).page(page)
+    messages = Message.joins(:user).where(channel_id: params['channel_id']).select("messages.*, users.display_name AS username").page(page)
 
     render_json_paginated(200, messages, page, messages.next_page, messages.total_pages)
   end
