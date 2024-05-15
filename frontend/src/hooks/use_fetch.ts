@@ -4,18 +4,17 @@ export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 type Method = 'GET' | 'POST' | 'PATH' | 'PUT' | 'DELETE';
 
-
 export function useFetch<DataType = any>(path: string, method: Method = 'GET', callback?: (data: DataType) => void) {
     const [data, setData] = useState<DataType>();
     const [requestFailed, setRequestFailed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    async function _fetch(body: any = null) {
+    async function _fetch(body: any = null, newPath: string | undefined = undefined) {
         setRequestFailed(false);
         setIsLoading(true);
 
         try {
-            const res = await fetch(`${backendUrl}/${path}`, {
+            const res = await fetch(`${backendUrl}/${newPath ? newPath : path}`, {
                 method,
                 body: body ? JSON.stringify(body) : undefined,
                 headers: {
