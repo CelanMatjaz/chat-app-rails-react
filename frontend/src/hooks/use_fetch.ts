@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 type Method = 'GET' | 'POST' | 'PATH' | 'PUT' | 'DELETE';
 

@@ -46,11 +46,22 @@
     }
 
     .link {
-        @apply underline visited:text-sky-300 hover:no-underline float-end;        
+        @apply underline visited:text-sky-300 hover:no-underline float-end;
     }
 
     .error {
         @apply bg-red-500 p-2 border-2 border-red-900 rounded
+    }
+
+    .room-icon {
+        @apply rounded-lg overflow-hidden cursor-pointer;
+        margin: 10px;
+
+        &.selected {
+            border-radius: 50%;
+        }
+
+        transition: border-radius .3s;
     }
 }
 
