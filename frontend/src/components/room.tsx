@@ -22,7 +22,7 @@ export const Room: React.FC = () => {
                             navigate(`/${roomId}/${c.id}`)
                         }
                         } >
-                            <ChannelItem channel={c} />
+                            <ChannelItem channel={c} selected={c.id == channelId} />
                         </div>
                     )}
                 </ul>
@@ -33,12 +33,13 @@ export const Room: React.FC = () => {
 }
 
 interface ChannelProps {
-    channel: Channel
+    channel: Channel,
+    selected: boolean
 };
 
 function ChannelItem(props: ChannelProps) {
-    const { name } = props.channel;
+    const { channel: { name }, selected } = props;
     return (
-        <li className="channel">{name}</li>
+        <li className={`channel ${selected ? 'selected' : ''}`}>{name}</li>
     );
 }
