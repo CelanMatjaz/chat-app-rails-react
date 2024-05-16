@@ -2,74 +2,43 @@ class AuthController < ApplicationController
   include CurrentUserConcern
 
   def register
-    user = User.create(auth_params)
+    user = User.new(auth_params)
 
-    if user.valid?
-      render json: {
-        status: 200
-      }
+    if user.save
+      render_json(200)
     else
-      render json: {
-        status: 422,
-        errors: user.errors.full_messages
-      }, status: :unprocessable_entity
+      render_json(422, nil, user.errors.full_messages)
     end
   end
 
   def login
     user = User.find_by(email: auth_params['email'])
+
+    unless user
+      render_json(401, nil, ['User with provided email does not exist'])
+      return
+    end
+
     authenticated = user.try(:authenticate, auth_params['password'])
 
-    if user.nil?
-      render json: {
-        status: 401,
-        errors: ['User with provided email does not exist']
-      }, status: :unauthorized
-      return
-    end
-
     unless authenticated
-      render json: {
-        status: 401,
-        errors: ['Invalid password']
-      }, status: :unauthorized
+      render_json(401, nil, ['Invalid password'])
       return
     end
 
-    if user && authenticated
-      session[:user_id] = user.id
-      logger.debug session[:user_id]
-      render json: {
-        status: 200,
-        logged_in: true,
-        user:
-      }
-      return
-    end
-
-    render json: {
-      status: 500
-    }, status: :internal_server_error
+    session[:user_id] = user.id
+    render_json(200, { logged_in: true, user: })
   end
 
   def logout
-    return unless session[:user_id]
-
     session.clear
   end
 
   def logged_in
     if @current_user
-      render json: {
-        status: 200,
-        logged_in: true,
-        user: @current_user
-      }
+      render_json(200, { logged_in: true, user: @current_user })
     else
-      render json: {
-        status: 200,
-        logged_in: false
-      }
+      render_json(200, { logged_in: false })
     end
   end
 
