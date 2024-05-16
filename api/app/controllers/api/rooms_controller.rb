@@ -7,9 +7,7 @@ class Api::RoomsController < ApplicationController
       return
     end
 
-    res = @current_user.rooms_users.joins(:room).select('rooms.*')
-
-    render_json(200, res)
+    render_json(200, @current_user.rooms_users.joins(:room).select('rooms.*'))
   end
 
   def get_all_created
