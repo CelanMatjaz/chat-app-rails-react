@@ -3,7 +3,7 @@ import { ResponseType } from "../types/fetch_types";
 
 export const backendUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-type Method = 'GET' | 'POST' | 'PATH' | 'PUT' | 'DELETE';
+type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
 export function useFetch<T = any>(loading = true) {
     const [data, setData] = useState<ResponseType<T>>();
