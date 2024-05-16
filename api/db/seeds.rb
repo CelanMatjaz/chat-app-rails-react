@@ -18,9 +18,11 @@ user = User.create!(email: 'test@test.com', password: 'password', password_confi
                     display_name: get_display_name)
 
 channels = []
+rooms = []
 
 %w[Room1 Room2 Room3].each do |room_name|
   room = user.rooms.create!(name: room_name, image_url: '/temp.png')
+  rooms.push(room.id)
 
   user.room_user.create!(room_id: room.id)
 
@@ -36,6 +38,9 @@ users = []
   u = User.create!(email: "test#{i}@test.com", password: 'password', password_confirmation: 'password',
                    display_name: get_display_name)
   users.push(u.id)
+  rooms.each do |id|
+    u.room_user.create!(room_id: id)    
+  end
 end
 
 (0..50).each do |_i|
