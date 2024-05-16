@@ -7,7 +7,9 @@ class Api::RoomsController < ApplicationController
       return
     end
 
-    render_json(200, @current_user.rooms.where(id: [@current_user.room_user.pluck(:room_id)]))
+    res = @current_user.room_user.joins(:room).select('rooms.*')
+
+    render_json(200, res)
   end
 
   def get_all_created

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
+
   namespace :api do
     get 'messages', to: 'messages#get'
     get 'messages/channel/:channel_id', to: 'messages#get_from_channel'
