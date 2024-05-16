@@ -3,7 +3,7 @@ import { Room } from '../../types/room'
 import { backendUrl } from '../../hooks/use_fetch';
 
 interface Props {
-    rooms?: Room[];
+    rooms: Room[];
     currentRoomId: number | null;
     onRoomClick: (id: number) => void;
 }
@@ -20,17 +20,3 @@ export const Sidebar: React.FC<Props> = (props) => {
     );
 }
 
-interface RoomIconProps {
-    room: Room;
-    selected: boolean;
-    onRoomClick: (id: number) => void;
-}
-
-function RoomIcon(props: RoomIconProps) {
-    const { room: r, selected, onRoomClick } = props;
-    return (
-        <li className={`room-icon ${selected ? 'selected' : ''}`} onClick={() => onRoomClick(r.id)}>
-            <img src={`${backendUrl}/${r.image_url}`} alt="room image" />
-        </li>
-    );
-}

@@ -6,6 +6,8 @@ import { useRecoilState } from "recoil";
 import { authState } from "./atoms/auth";
 import { PropsWithChildren } from "react";
 import { Layout } from "./components/layout/layout";
+import { Room } from "./components/room";
+import { Channel } from "./components/channel";
 
 const ProtectedRoute: React.FC<PropsWithChildren> = ({ children }) => {
     const [auth] = useRecoilState(authState);
@@ -24,7 +26,19 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <Layout />,
+                Component: Layout,
+                children: [
+                    {
+                        path: ":roomId",
+                        Component: Room,
+                        children: [
+                            {
+                                path: ":channelId",
+                                Component: Channel
+                            }
+                        ]
+                    },
+                ]
             },
             {
                 path: "/login",

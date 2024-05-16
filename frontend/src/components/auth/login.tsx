@@ -11,37 +11,36 @@ export const Login = () => {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
-
     const [auth, setAuth] = useRecoilState(authState);
+    const { fetch, isLoading, response } = useFetch(false);
 
-    const { fetch, isLoading, data } = useFetch('auth/login', 'POST');
+    useEffect(() => {
+        if (isLoading) {
+            return;
+        }
+
+        setAuth({ ...response?.data });
+    }, [isLoading]);
+
+    if (!isLoading && auth.logged_in) {
+        navigate('/');
+    }
 
     async function submit() {
-        await fetch({
+        fetch('auth/login', 'POST', {
             user: {
                 email,
                 password,
                 password_confirmation: password,
             }
         });
-
-        setPassword('');
-    }
-
-    useEffect(() => {
-        if (!data) return;
-        setAuth({ ...auth, ...data });
-        navigate('/')
-    }, [data]);
-
-    if (auth.logged_in) {
-        return <Navigate to="/" />
     }
 
     return (
         <div className="form-page">
             <Form onSubmit={submit}>
-                {data?.errors && <Errors errors={data.errors} />}
+                <Errors errors={response?.errors} />
+
                 <div>
                     <label htmlFor="email">Email</label>
                     <input id="email" name="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
@@ -56,7 +55,7 @@ export const Login = () => {
                     <Link className="link" to="/register">Register</Link>
                 </div>
 
-                <button type="submit" className="button" disabled={isLoading}>{isLoading ? "Submitting..." : "Login"}</button>
+                <button type="submit" className="button" disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</button>
             </Form>
         </div>
     )

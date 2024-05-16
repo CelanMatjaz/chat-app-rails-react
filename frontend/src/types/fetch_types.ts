@@ -4,4 +4,5 @@ export interface ResponseType<T> {
     total_pages?: number
     next_page?: number | null
     data: T
+    errors?: string[]
 };

@@ -1,47 +1,27 @@
 import { useState } from "react";
+import { ResponseType } from "../types/fetch_types";
 
-export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const backendUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 type Method = 'GET' | 'POST' | 'PATH' | 'PUT' | 'DELETE';
 
-export function useFetch<DataType = any>(path: string, method: Method = 'GET', callback?: (data: DataType) => void) {
-    const [data, setData] = useState<DataType>();
-    const [requestFailed, setRequestFailed] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+export function useFetch<T = any>(loading = true) {
+    const [data, setData] = useState<ResponseType<T>>();
+    const [isLoading, setIsLoading] = useState(loading);
 
-    async function _fetch(body: any = null, newPath: string | undefined = undefined) {
-        setRequestFailed(false);
+    async function _fetch(path: string, method: Method = 'GET', body: any = undefined) {
         setIsLoading(true);
+        const res = await fetch(`${backendUrl}/${path}`, {
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : undefined,
+            credentials: 'include',
+            method
+        });
+        const data = await res.json() as ResponseType<T>;
 
-        try {
-            const res = await fetch(`${backendUrl}/${newPath ? newPath : path}`, {
-                method,
-                body: body ? JSON.stringify(body) : undefined,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include'
-            });
-
-            const data = await res.json();
-
-            setData(data);
-
-            if (callback) {
-                callback(data);
-            }
-        } catch (e) {
-            setRequestFailed(true);
-        }
-        finally {
-            setIsLoading(false);
-        }
+        setData(data);
+        setIsLoading(false)
     }
 
-    return { fetch: _fetch, isLoading, data, requestFailed };
+    return { response: data, isLoading, fetch: _fetch };
 }
-
-
-
-
-

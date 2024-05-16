@@ -1,75 +1,43 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
-import { useFetch } from '../../hooks/use_fetch';
-import { ResponseType } from '../../types/fetch_types';
+import { backendUrl, useFetch } from '../../hooks/use_fetch';
 import { Room } from '../../types/room';
-import { Sidebar } from './sidebar';
-import { ChannelList } from './channel_list';
 import { Message } from '../../types/message';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 export const Layout = () => {
-    const [currentRoom, setCurrentRoom] = useState(localStorage.getItem('lastViewedRoomId') as number | null);
-    const { fetch, data: roomData } = useFetch<ResponseType<Room[]>>('api/rooms');
-    const { fetch: fetchMessages, data: messageData } = useFetch<ResponseType<Message[]>>('api/messages');
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [channelId, setChannelId] = useState<number>();
+
+    const navigate = useNavigate();
+    const { roomId } = useParams<{ roomId: string }>();
+    const { response, fetch } = useFetch<Room[]>();
 
     useEffect(() => {
-        fetch();
+        fetch('api/rooms', 'GET');
     }, []);
-
-    useEffect(() => {
-        fetchMessages(null, `api/messages/channel/${channelId}`);
-    }, [channelId]);
-
-    useEffect(() => {
-        if (!messageData) {
-            return;
-        }
-
-        setMessages(messageData?.data);
-    }, [messageData]);
-
-    function setAndSaveRoom(id: number) {
-        setCurrentRoom(id);
-        localStorage.setItem('lastViewedRoomId', id.toString());
-    }
 
     return (
         <div className="layout grid h-screen" style={{ gridTemplateColumns: "80px auto" }}>
-            <Sidebar rooms={roomData?.data} onRoomClick={setAndSaveRoom} currentRoomId={currentRoom} />
+            <div className="bg-gray-800 h-screen overflow-y-auto" style={{ width: "80px" }}>
+                <ul>
+                    {response?.data?.map(r => <div key={r.id} onClick={() => navigate(`/${r.id}`)}><RoomIcon room={r} selected={r.id.toString() == roomId} /></div>)}
+                </ul>
+            </div>
             <div className="main">
-                {currentRoom && <ChannelList roomId={currentRoom} onChannelSelected={setChannelId} />}
-                <div className="messages-container">
-                    <div className="messages">
-                        {messages.map(m => <MessageItem key={m.id} message={m} />)}
-                    </div>
-                    <form className="input" onSubmit={e => {
-                        e.preventDefault();
-                    }}>
-                        <input type="text" min="1" max="1024" />
-                        <button style={{ userSelect: 'none' }}>{'<'}</button>
-                    </form>
-                </div>
+                <Outlet />
             </div>
         </div>
     );
 }
 
-interface MessageProps {
-    message: Message;
-};
+interface RoomIconProps {
+    room: Room;
+    selected: boolean;
+}
 
-function MessageItem(props: MessageProps) {
-    const { text, username, created_at } = props.message;
+function RoomIcon(props: RoomIconProps) {
+    const { room: r, selected } = props;
     return (
-        <div className="message">
-            <div>
-                <small className="">by: {username}</small>
-                <small className="float-end">{new Date(created_at).toLocaleString()}</small>
-            </div>
-            <div>{text}</div>
-        </div>
+        <li className={`room-icon ${selected ? 'selected' : ''}`} >
+            <img src={`${backendUrl}/${r.image_url}`} alt="room image" />
+        </li >
     );
 }
-
