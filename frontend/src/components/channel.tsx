@@ -8,7 +8,9 @@ export const Channel: React.FC = () => {
     const { channelId } = useParams<{ channelId: string }>();
     const [socket, setSocket] = useState<WebSocket>();
     const [messages, setMessages] = useState<Message[]>([]);
+    const [messageText, setMessageText] = useState('');
     const { response: messageResponse, fetch: fetchMessages } = useFetch<Message[]>();
+    const { fetch: createMessage } = useFetch<Message>();
 
     useEffect(() => {
         setSocket(createSocket<{ message: Message }>('MessagesChannel', { id: channelId }, (data) => {
@@ -50,8 +52,15 @@ export const Channel: React.FC = () => {
                 </div>
                 <form className="input" onSubmit={e => {
                     e.preventDefault();
+                    createMessage('/api/messages', 'POST', {
+                        message: {
+                            text: messageText,
+                            channel_id: channelId
+                        }
+                    });
+                    setMessageText('');
                 }}>
-                    <input type="text" min="1" max="1024" />
+                    <input type="text" min="1" max="1024" value={messageText} onChange={e => setMessageText(e.target.value)} />
                     <button style={{ userSelect: 'none' }}>{'<'}</button>
                 </form>
             </div>
