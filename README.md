@@ -58,3 +58,9 @@ The seeds also create some:
 
 - [x] User authentication
 - [x] Message CRUD functionality with websockets which broadcast on message updates
+
+The frontend app redirects to `/login` by default, if no user is logged in. The login page already has credentials of a user filled in on startup for easier usage.
+
+You can then click on one of the "chat rooms" in the upper left corner of the page, which will then show channels that belong to that room. Clicking on a channel will show the messages associated with it from all users.
+
+Opening the app in 2 seperate browser windows and sending a message will broadcast the message in both windows, even on the same account.

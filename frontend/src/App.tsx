@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import './App.css';
 import { authState } from './atoms/auth';
@@ -14,6 +14,7 @@ interface IsLoggedInResponse {
 };
 
 function App() {
+    const navigate = useNavigate();
     const [_, setAuth] = useRecoilState(authState);
 
     const { fetch, isLoading, response } = useFetch<IsLoggedInResponse>(true);
@@ -33,6 +34,9 @@ function App() {
                 logged_in: true,
                 user: data.user
             });
+        }
+        else {
+            navigate('/login')
         }
     }, [isLoading]);
 

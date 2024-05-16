@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Form } from '../partials/form'
 import { useFetch } from '../../hooks/use_fetch';
-import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Errors } from '../partials/errors';
 import { authState } from '../../atoms/auth';
 import { useRecoilState } from 'recoil';
 
 export const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("test@test.com");
+    const [password, setPassword] = useState("password");
 
     const navigate = useNavigate();
     const [auth, setAuth] = useRecoilState(authState);
