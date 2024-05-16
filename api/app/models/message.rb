@@ -6,7 +6,9 @@ class Message < ApplicationRecord
   belongs_to :channel
   belongs_to :user
 
-  after_create_commit { broadcast_message }
+  after_create_commit { broadcast_message_created }
+  after_update_commit { broadcast_message_updated }
+  after_destroy_commit { broadcast_message_deleted }
 
   def as_json_msg(_options = {})
     {
@@ -22,7 +24,15 @@ class Message < ApplicationRecord
 
   private
 
-  def broadcast_message
-    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg })
+  def broadcast_message_created
+    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'created' })
+  end
+
+  def broadcast_message_updated
+    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'updated' })
+  end
+
+  def broadcast_message_deleted
+    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'deleted' })
   end
 end

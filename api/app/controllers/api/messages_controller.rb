@@ -41,7 +41,12 @@ class Api::MessagesController < ApplicationController
 
     message = Message.find_by(id: id_param, user_id: @current_user.id)
 
-    message.text = update_message_params['name']
+    unless message
+      render_json(404)
+      return
+    end
+
+    message.update(update_message_params)
 
     if message.save
       render_json(200, message)
