@@ -57,62 +57,53 @@ export const Channel: React.FC = () => {
         setMessages(messageResponse.data || []);
     }, [messageResponse]);
 
-    return (
-        <>
-            <div className="messages-container">
-                <div className="messages">
-                    {messages.map(m =>
-                        <div className="message" key={m.id}>
-                            {m.user_id == auth.user?.id && <div className="message-crud-buttons">
-                                <button onClick={() => {
-                                    setEditMessageId(m.id);
-                                    setEditMessageText(m.text);
-                                }}><PencilIcon /></button>
-                                <button onClick={() => {
-                                    deleteMessage(`api/messages/${m.id}`, 'DELETE');
-                                }}><XIcon /></button>
-                            </div>}
-                            <div>
-                                <small className="float-end">{new Date(m.created_at).toLocaleString()}</small>
-                            </div>
-                            <div className="mt-5">
-                                {editMessageId == m.id
-                                    ? <textarea className="message-edit" value={editMessageText} onChange={e => setEditMessageText(e.target.value)} />
-                                    : m.text
-                                }
-                                {editMessageId == m.id && <div>
-                                    <button style={{ marginLeft: '0' }} onClick={() => {
-                                        setEditMessageId(null);
-                                        setEditMessageText('');
-                                    }}>Cancel</button>
-                                    <button onClick={() => {
-                                        updateMessage(`api/messages/${m.id}`, 'PATCH', { message: { text: editMessageText, channel_id: channelId } });
-                                        setEditMessageId(null);
-                                        setEditMessageText('');
-                                    }}>Update</button>
-                                </div>}
-                            </div>
-                            <div>
-                                <small className="float-end">by: {m.username}</small>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <form className="input" onSubmit={e => {
-                    e.preventDefault();
-                    createMessage('/api/messages', 'POST', {
-                        message: {
-                            text: messageText,
-                            channel_id: channelId
-                        }
-                    });
-                    setMessageText('');
-                }}>
-                    <input type="text" min="1" max="1024" value={messageText} onChange={e => setMessageText(e.target.value)} />
-                    <button style={{ userSelect: 'none' }}><PaperAirplaneIcon className="rotate-180" /></button>
-                </form>
-            </div >
+    function setEditMessage(id: number | null, text: string) {
+        setEditMessageId(id);
+        setEditMessageText(text);
+    }
 
-        </>
+    function submitMessage(e: React.FormEvent) {
+        e.preventDefault();
+        createMessage('/api/messages', 'POST', {
+            message: {
+                text: messageText,
+                channel_id: channelId
+            }
+        });
+        setMessageText('');
+    }
+
+    return (
+        <div className="messages-container">
+            <div className="messages">
+                {messages.map(m => {
+                    const hasUser = m.user_id == auth.user?.id;
+                    const isEdit = m.id == editMessageId;
+
+                    return <div className="message" key={m.id}>
+                        {hasUser && <div className="message-crud-buttons">
+                            <button onClick={() => { setEditMessage(m.id, m.text); }}><PencilIcon /></button>
+                            <button onClick={() => { deleteMessage(`api/messages/${m.id}`, 'DELETE'); }}><XIcon /></button>
+                        </div>}
+                        <small className="float-end">{new Date(m.created_at).toLocaleString()}</small>
+                        <form className="mt-5">
+                            {isEdit ? <textarea className="message-edit" value={editMessageText} onChange={e => setEditMessage(m.id, e.target.value)} /> : m.text}
+                            {isEdit && <div>
+                                <button style={{ marginLeft: '0' }} type="submit" onClick={() => {
+                                    updateMessage(`api/messages/${m.id}`, 'PATCH', { message: { text: editMessageText, channel_id: channelId } });
+                                    setEditMessage(null, '');
+                                }}>Update</button>
+                                <button onClick={() => { setEditMessage(null, ''); }}>Cancel</button>
+                            </div>}
+                        </form>
+                        <small className="float-end">by: {m.username}</small>
+                    </div>
+                })}
+            </div>
+            <form className="input" onSubmit={submitMessage}>
+                <input type="text" min="1" max="1024" value={messageText} onChange={e => setMessageText(e.target.value)} />
+                <button style={{ userSelect: 'none' }}><PaperAirplaneIcon className="rotate-180" /></button>
+            </form>
+        </div >
     )
 }
