@@ -24,7 +24,7 @@ rooms = []
   room = user.rooms.create!(name: room_name, image_url: '/temp.png')
   rooms.push(room.id)
 
-  user.room_user.create!(room_id: room.id)
+  user.rooms_users.create!(room_id: room.id)
 
   (0..3).each do |_|
     c = room.channels.create!(name: Faker::Name.initials(number: 4))
@@ -39,7 +39,7 @@ users = []
                    display_name: get_display_name)
   users.push(u.id)
   rooms.each do |id|
-    u.room_user.create!(room_id: id)    
+    u.rooms_users.create!(room_id: id)    
   end
 end
 

@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :rooms, dependent: :delete_all
-  has_many :room_user, dependent: :delete_all
+  has_many :rooms_users, dependent: :delete_all
   has_many :messages, dependent: :delete_all
 
   def as_json(_options = {})

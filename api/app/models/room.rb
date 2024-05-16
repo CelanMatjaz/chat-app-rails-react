@@ -4,5 +4,5 @@ class Room < ApplicationRecord
 
   belongs_to :user
   has_many :channels, dependent: :delete_all
-  has_many :room_user, dependent: :delete_all
+  has_many :rooms_users, dependent: :delete_all
 end

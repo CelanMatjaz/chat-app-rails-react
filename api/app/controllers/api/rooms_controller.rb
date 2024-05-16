@@ -7,7 +7,7 @@ class Api::RoomsController < ApplicationController
       return
     end
 
-    res = @current_user.room_user.joins(:room).select('rooms.*')
+    res = @current_user.rooms_users.joins(:room).select('rooms.*')
 
     render_json(200, res)
   end
@@ -45,7 +45,7 @@ class Api::RoomsController < ApplicationController
     room = @current_user.rooms.new(name: new_room_params['name'], image_url: '/temp.png')
 
     if room.save
-      @current_user.room_user.create(room_id: room.id)
+      @current_user.rooms_users.create(room_id: room.id)
       render_json(200, room)
     else
       render_json(422, nil, [room.errors.full_messages])

@@ -32,13 +32,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_201123) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
-  create_table "room_users", id: false, force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "room_id"
-    t.index ["room_id"], name: "index_room_users_on_room_id"
-    t.index ["user_id"], name: "index_room_users_on_user_id"
-  end
-
   create_table "rooms", force: :cascade do |t|
     t.string "name"
     t.string "image_url"
@@ -46,6 +39,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_201123) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_rooms_on_user_id"
+  end
+
+  create_table "rooms_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "room_id", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -59,7 +57,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_201123) do
   add_foreign_key "channels", "rooms"
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "users"
-  add_foreign_key "room_users", "rooms"
-  add_foreign_key "room_users", "users"
   add_foreign_key "rooms", "users"
 end
