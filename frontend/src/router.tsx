@@ -5,7 +5,7 @@ import { Register } from "./components/auth/register";
 import { useRecoilState } from "recoil";
 import { authState } from "./atoms/auth";
 import { PropsWithChildren } from "react";
-import { Layout } from "./components/layout/layout";
+import { Layout } from "./components/layout";
 import { Room } from "./components/room";
 import { Channel } from "./components/channel";
 

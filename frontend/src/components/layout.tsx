@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { backendUrl, useFetch } from '../../hooks/use_fetch';
-import { Room } from '../../types/room';
-import { Message } from '../../types/message';
+import { backendUrl, useFetch } from '../hooks/use_fetch';
+import { Room } from '../types/room';
+import { Message } from '../types/message';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 export const Layout = () => {
