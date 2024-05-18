@@ -25,14 +25,14 @@ class Message < ApplicationRecord
   private
 
   def broadcast_message_created
-    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'created' })
+    ActionCable.server.broadcast("message_on_channel_#{channel_id}", { message: as_json_msg, status: 'created' })
   end
 
   def broadcast_message_updated
-    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'updated' })
+    ActionCable.server.broadcast("message_on_channel_#{channel_id}", { message: as_json_msg, status: 'updated' })
   end
 
   def broadcast_message_deleted
-    ActionCable.server.broadcast("channel_#{channel_id}", { message: as_json_msg, status: 'deleted' })
+    ActionCable.server.broadcast("message_on_channel_#{channel_id}", { message: as_json_msg, status: 'deleted' })
   end
 end

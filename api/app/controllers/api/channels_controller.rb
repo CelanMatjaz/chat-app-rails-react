@@ -45,7 +45,7 @@ class Api::ChannelsController < ApplicationController
     if channel.save
       render_json(200, channel)
     else
-      render_json(500, nil, ['Internal server error'])
+      render_json(422, nil, [channel.errors.full_messages])
     end
   end
 
