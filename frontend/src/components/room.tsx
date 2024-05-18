@@ -12,8 +12,8 @@ export const Room: React.FC = () => {
     const [socket, setSocket] = useState<WebSocket>();
 
     useEffect(() => {
+        fetchChannels(`api/channels/room/${roomId}`);
         setSocket(createSocket<{ channel: Channel, status: string }>('ChannelsChannel', { id: roomId }, (data) => {
-            console.log(data)
             switch (data.status) {
                 case 'created':
                     setChannels(state => [data.channel, ...state]);
@@ -35,10 +35,6 @@ export const Room: React.FC = () => {
         return () => {
             socket?.close();
         }
-    }, []);
-
-    useEffect(() => {
-        fetchChannels(`api/channels/room/${roomId}`);
     }, [roomId]);
 
     useEffect(() => {
@@ -57,8 +53,7 @@ export const Room: React.FC = () => {
                         <div key={c.id} onClick={() => {
                             if (c.id.toString() == channelId) return;
                             navigate(`/${roomId}/${c.id}`)
-                        }
-                        } >
+                        }} >
                             <ChannelItem channel={c} selected={c.id.toString() == channelId} />
                         </div>
                     )}

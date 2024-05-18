@@ -21,6 +21,7 @@ export const Channel: React.FC = () => {
     const { fetch: deleteMessage } = useFetch();
 
     useEffect(() => {
+        fetchMessages(`api/messages/channel/${channelId}`);
         setSocket(createSocket<{ message: Message, status: string }>('MessagesChannel', { id: channelId }, (data) => {
             switch (data.status) {
                 case 'created':
@@ -43,10 +44,6 @@ export const Channel: React.FC = () => {
         return () => {
             socket?.close();
         }
-    }, []);
-
-    useEffect(() => {
-        fetchMessages(`api/messages/channel/${channelId}`);
     }, [channelId]);
 
     useEffect(() => {
