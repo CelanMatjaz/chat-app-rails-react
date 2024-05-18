@@ -73,7 +73,7 @@
         width: 200px;
 
         & .channel {
-            @apply bg-gray-600 my-1 mx-2 mb-2 px-2 py-1 border-gray-500 border rounded text-white hover:bg-gray-800 cursor-pointer;
+            @apply bg-gray-600 my-1 mx-2 mb-2 px-2 py-1 border-gray-500 border rounded text-white hover:bg-gray-800 cursor-pointer text-ellipsis overflow-x-hidden;
         }
 
         & .selected {

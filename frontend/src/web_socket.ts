@@ -2,7 +2,7 @@ import { backendUrl } from "./hooks/use_fetch";
 
 const socketUrl = `${backendUrl.replace('http', 'ws')}/cable`;
 
-type SocketChannel = 'MessagesChannel'
+type SocketChannel = 'MessagesChannel' | 'ChannelsChannel';
 
 export function createSocket<T = any>(channel: SocketChannel, params: {}, callback: (data: T) => void) {
     const ws = new WebSocket(socketUrl);
@@ -18,6 +18,7 @@ export function createSocket<T = any>(channel: SocketChannel, params: {}, callba
 
         ws.onmessage = (ev) => {
             const data = JSON.parse(ev.data);
+            console.log(data)
             if (["ping", "welcome", "confirm_subscription"].includes(data.type)) {
                 return;
             }
